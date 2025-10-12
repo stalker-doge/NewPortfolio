@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', function() {
     initNavigation();
     initScrollEffects();
     initProjectModal();
-    initContactForm();
     initAnimations();
     initInteractiveElements();
     initPerformanceOptimizations();
@@ -391,185 +390,7 @@ function initProjectModal() {
     });
 }
 
-// Contact Form Functionality
-function initContactForm() {
-    const contactForm = document.getElementById('contactForm');
-    
-    if (contactForm) {
-        contactForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Get form data
-            const formData = new FormData(contactForm);
-            const name = formData.get('name');
-            const email = formData.get('email');
-            const subject = formData.get('subject');
-            const message = formData.get('message');
-            
-            // Basic validation
-            if (!name || !email || !subject || !message) {
-                showNotification('Please fill in all required fields.', 'error');
-                return;
-            }
-            
-            // Email validation
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                showNotification('Please enter a valid email address.', 'error');
-                return;
-            }
-            
-            // Simulate form submission (in real implementation, this would send to server)
-            const submitButton = contactForm.querySelector('button[type="submit"]');
-            const originalText = submitButton.innerHTML;
-            
-            submitButton.innerHTML = '<span>⏳</span> Sending...';
-            submitButton.disabled = true;
-            
-            setTimeout(() => {
-                showNotification('Thank you for your message! I\'ll get back to you within 24 hours.', 'success');
-                contactForm.reset();
-                submitButton.innerHTML = originalText;
-                submitButton.disabled = false;
-            }, 2000);
-        });
-    }
-}
 
-// Notification System
-function showNotification(message, type = 'info') {
-    // Create notification element
-    const notification = document.createElement('div');
-    notification.className = `notification notification-${type}`;
-    notification.innerHTML = `
-        <div class="notification-content">
-            <span class="notification-icon">${type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️'}</span>
-            <span class="notification-message">${message}</span>
-        </div>
-        <button class="notification-close">&times;</button>
-    `;
-    
-    // Add notification styles if not already added
-    if (!document.querySelector('#notification-styles')) {
-        const styles = document.createElement('style');
-        styles.id = 'notification-styles';
-        styles.textContent = `
-            .notification {
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                background: var(--card-bg);
-                border: 1px solid var(--border-color);
-                border-radius: var(--radius-lg);
-                padding: var(--spacing-md);
-                min-width: 300px;
-                max-width: 400px;
-                z-index: 10000;
-                box-shadow: var(--shadow-xl);
-                backdrop-filter: blur(10px);
-                animation: slideInRight 0.3s ease-out;
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                gap: var(--spacing-md);
-            }
-            
-            .notification-success {
-                border-left: 4px solid #4CAF50;
-            }
-            
-            .notification-error {
-                border-left: 4px solid #f44336;
-            }
-            
-            .notification-info {
-                border-left: 4px solid var(--accent-pink);
-            }
-            
-            .notification-content {
-                display: flex;
-                align-items: center;
-                gap: var(--spacing-sm);
-                flex: 1;
-            }
-            
-            .notification-icon {
-                font-size: 1.2rem;
-            }
-            
-            .notification-message {
-                color: var(--text-secondary);
-                font-size: 0.9rem;
-            }
-            
-            .notification-close {
-                background: none;
-                border: none;
-                color: var(--text-muted);
-                font-size: 1.2rem;
-                cursor: pointer;
-                padding: 0;
-                width: 20px;
-                height: 20px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                border-radius: 50%;
-                transition: var(--transition);
-            }
-            
-            .notification-close:hover {
-                background: var(--tertiary-dark);
-                color: var(--text-primary);
-            }
-            
-            @keyframes slideInRight {
-                from {
-                    transform: translateX(100%);
-                    opacity: 0;
-                }
-                to {
-                    transform: translateX(0);
-                    opacity: 1;
-                }
-            }
-            
-            @keyframes slideOutRight {
-                from {
-                    transform: translateX(0);
-                    opacity: 1;
-                }
-                to {
-                    transform: translateX(100%);
-                    opacity: 0;
-                }
-            }
-        `;
-        document.head.appendChild(styles);
-    }
-    
-    // Add to DOM
-    document.body.appendChild(notification);
-    
-    // Close button functionality
-    const closeBtn = notification.querySelector('.notification-close');
-    closeBtn.addEventListener('click', () => {
-        notification.style.animation = 'slideOutRight 0.3s ease-in-out';
-        setTimeout(() => {
-            notification.remove();
-        }, 300);
-    });
-    
-    // Auto-remove after 5 seconds
-    setTimeout(() => {
-        if (notification.parentNode) {
-            notification.style.animation = 'slideOutRight 0.3s ease-in-out';
-            setTimeout(() => {
-                notification.remove();
-            }, 300);
-        }
-    }, 5000);
-}
 
 // Animations and Interactive Elements
 function initAnimations() {
@@ -879,7 +700,6 @@ function initAll() {
     initNavigation();
     initScrollEffects();
     initProjectModal();
-    initContactForm();
     initAnimations();
     initInteractiveElements();
     initPerformanceOptimizations();
