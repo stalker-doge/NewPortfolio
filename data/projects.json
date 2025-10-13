@@ -302,7 +302,48 @@
       },
       "id": "yuri",
       "lastModified": "2025-10-13T12:17:41.577Z"
+    },
+    {
+      "title": "girls kissing",
+      "subtitle": "",
+      "description": "honestly quite incredible",
+      "status": "published",
+      "featured": true,
+      "publishDate": "2025-10-13",
+      "category": [
+        "unity",
+        "featured"
+      ],
+      "technologies": [
+        "REAL girls kissing"
+      ],
+      "features": [
+        "girl on girl action"
+      ],
+      "links": {
+        "demo": "",
+        "github": "",
+        "download": ""
+      },
+      "images": {
+        "hero": "assets/projects/girls-kissing/hero.jpg",
+        "thumbnail": "",
+        "gallery": []
+      },
+      "stats": {
+        "developmentTime": "",
+        "teamSize": "",
+        "linesOfCode": ""
+      },
+      "challenges": [],
+      "seo": {
+        "metaTitle": "",
+        "metaDescription": "",
+        "keywords": []
+      },
+      "id": "girls-kissing",
+      "lastModified": "2025-10-13T12:28:51.221Z"
     }
   ],
-  "lastUpdated": "2025-10-13T12:17:41.577Z"
+  "lastUpdated": "2025-10-13T12:28:51.221Z"
 }
