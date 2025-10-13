@@ -5,7 +5,10 @@
       "title": "Cyber Quest RPG",
       "subtitle": "Unity-built Cyberpunk RPG",
       "description": "Comprehensive Unity-built cyberpunk RPG demonstrating advanced gameplay systems, narrative design, and visual effects implementation. Features complex character progression, dynamic combat mechanics, and immersive world-building.",
-      "category": ["unity", "featured"],
+      "category": [
+        "unity",
+        "featured"
+      ],
       "featured": true,
       "status": "published",
       "publishDate": "2024-01-15",
@@ -24,7 +27,12 @@
         "github": "#",
         "download": "#"
       },
-      "technologies": ["Unity", "C#", "DOTween", "Post Processing"],
+      "technologies": [
+        "Unity",
+        "C#",
+        "DOTween",
+        "Post Processing"
+      ],
       "features": [
         "Dynamic combat system with multiple weapon types",
         "Branching narrative with player choices affecting story",
@@ -51,7 +59,13 @@
       "seo": {
         "metaTitle": "Cyber Quest RPG - Game Development Project",
         "metaDescription": "A comprehensive Unity-built cyberpunk RPG featuring advanced gameplay systems, narrative design, and visual effects implementation.",
-        "keywords": ["unity", "rpg", "cyberpunk", "game development", "csharp"]
+        "keywords": [
+          "unity",
+          "rpg",
+          "cyberpunk",
+          "game development",
+          "csharp"
+        ]
       },
       "lastModified": "2024-01-20T10:00:00Z"
     },
@@ -60,7 +74,10 @@
       "title": "Neon Racing Pro",
       "subtitle": "Unreal Engine Racing Simulator",
       "description": "High-performance Unreal Engine racing simulator showcasing advanced physics implementation, vehicle dynamics, and multiplayer architecture. Demonstrates expertise in C++ programming, network optimization, and real-time systems development.",
-      "category": ["unreal", "multiplayer"],
+      "category": [
+        "unreal",
+        "multiplayer"
+      ],
       "featured": false,
       "status": "published",
       "publishDate": "2024-01-10",
@@ -74,7 +91,12 @@
         "github": "#",
         "download": "#"
       },
-      "technologies": ["Unreal Engine 5", "C++", "Chaos Physics", "Steamworks"],
+      "technologies": [
+        "Unreal Engine 5",
+        "C++",
+        "Chaos Physics",
+        "Steamworks"
+      ],
       "features": [
         "Advanced vehicle physics and dynamics",
         "16-player multiplayer support",
@@ -101,7 +123,13 @@
       "seo": {
         "metaTitle": "Neon Racing Pro - Unreal Engine Racing Game",
         "metaDescription": "High-performance Unreal Engine racing simulator with advanced physics, multiplayer support, and realistic vehicle dynamics.",
-        "keywords": ["unreal engine", "racing game", "cpp", "multiplayer", "physics"]
+        "keywords": [
+          "unreal engine",
+          "racing game",
+          "cpp",
+          "multiplayer",
+          "physics"
+        ]
       },
       "lastModified": "2024-01-20T10:00:00Z"
     },
@@ -110,7 +138,10 @@
       "title": "Puzzle Master Mobile",
       "subtitle": "Cross-Platform Mobile Puzzle Game",
       "description": "Cross-platform mobile puzzle game optimized for performance and user engagement. Features adaptive difficulty systems, social integration, and monetization strategies. Demonstrates mobile-first development approach and platform optimization.",
-      "category": ["unity", "mobile"],
+      "category": [
+        "unity",
+        "mobile"
+      ],
       "featured": false,
       "status": "published",
       "publishDate": "2024-01-05",
@@ -124,7 +155,12 @@
         "github": "#",
         "download": "#"
       },
-      "technologies": ["Unity Mobile", "C#", "Firebase", "Unity Ads"],
+      "technologies": [
+        "Unity Mobile",
+        "C#",
+        "Firebase",
+        "Unity Ads"
+      ],
       "features": [
         "200+ progressively challenging levels",
         "Adaptive difficulty system",
@@ -151,7 +187,14 @@
       "seo": {
         "metaTitle": "Puzzle Master Mobile - Cross-Platform Puzzle Game",
         "metaDescription": "Cross-platform mobile puzzle game with adaptive difficulty, social integration, and optimized performance for all devices.",
-        "keywords": ["mobile game", "unity", "puzzle", "firebase", "ios", "android"]
+        "keywords": [
+          "mobile game",
+          "unity",
+          "puzzle",
+          "firebase",
+          "ios",
+          "android"
+        ]
       },
       "lastModified": "2024-01-20T10:00:00Z"
     },
@@ -160,7 +203,10 @@
       "title": "Multiplayer Arena",
       "subtitle": "Competitive Multiplayer Battle Arena",
       "description": "Competitive multiplayer battle arena featuring real-time combat systems, network synchronization, and anti-cheat mechanisms. Demonstrates expertise in network programming, server architecture, and competitive game design principles.",
-      "category": ["unity", "multiplayer"],
+      "category": [
+        "unity",
+        "multiplayer"
+      ],
       "featured": false,
       "status": "published",
       "publishDate": "2024-01-01",
@@ -174,7 +220,12 @@
         "github": "#",
         "download": "#"
       },
-      "technologies": ["Unity", "Mirror Networking", "Photon", "MLAPI"],
+      "technologies": [
+        "Unity",
+        "Mirror Networking",
+        "Photon",
+        "MLAPI"
+      ],
       "features": [
         "Real-time multiplayer combat",
         "Ranked matchmaking system",
@@ -201,9 +252,53 @@
       "seo": {
         "metaTitle": "Multiplayer Arena - Competitive Battle Arena Game",
         "metaDescription": "Competitive multiplayer battle arena with real-time combat, ranked matchmaking, and advanced anti-cheat systems.",
-        "keywords": ["multiplayer", "unity", "networking", "competitive", "anticheat"]
+        "keywords": [
+          "multiplayer",
+          "unity",
+          "networking",
+          "competitive",
+          "anticheat"
+        ]
       },
       "lastModified": "2024-01-20T10:00:00Z"
+    },
+    {
+      "title": "yuri",
+      "subtitle": "",
+      "description": "yurious",
+      "status": "draft",
+      "featured": true,
+      "publishDate": "2025-10-13",
+      "category": [
+        "unreal",
+        "featured"
+      ],
+      "technologies": [],
+      "features": [],
+      "links": {
+        "demo": "",
+        "github": "",
+        "download": ""
+      },
+      "images": {
+        "hero": "",
+        "thumbnail": "",
+        "gallery": []
+      },
+      "stats": {
+        "developmentTime": "",
+        "teamSize": "",
+        "linesOfCode": ""
+      },
+      "challenges": [],
+      "seo": {
+        "metaTitle": "",
+        "metaDescription": "",
+        "keywords": []
+      },
+      "id": "yuri",
+      "lastModified": "2025-10-13T11:25:01.694Z"
     }
-  ]
+  ],
+  "lastUpdated": "2025-10-13T11:25:01.694Z"
 }
