@@ -116,157 +116,196 @@ function initScrollEffects() {
 // Project Modal Functionality
 function initProjectModal() {
     const modal = document.getElementById('projectModal');
-    const projectCards = document.querySelectorAll('.project-card');
     const closeBtn = document.querySelector('.modal-close');
     const modalOverlay = document.querySelector('.modal-overlay');
     
     let currentProjectIndex = 0;
-    const projects = [
-        {
-            title: "Cyber Quest RPG",
-            subtitle: "Unity-built Cyberpunk RPG",
-            overview: "A comprehensive Unity-built cyberpunk RPG featuring advanced gameplay systems, narrative design, and visual effects implementation. This project demonstrates expertise in complex game development, character progression systems, and immersive world-building.",
-            features: [
-                "Dynamic combat system with multiple weapon types",
-                "Branching narrative with player choices affecting story",
-                "Character customization and progression system",
-                "Advanced visual effects and post-processing",
-                "Open-world exploration with dynamic events",
-                "Inventory and crafting system"
-            ],
-            techStack: [
-                { name: "Unity Engine", description: "Primary game development platform" },
-                { name: "C#", description: "Programming language for game logic" },
-                { name: "DOTween", description: "Animation and tweening library" },
-                { name: "Post Processing Stack", description: "Visual effects and image processing" }
-            ],
-            challenges: [
-                {
-                    challenge: "Implementing seamless open-world transitions",
-                    solution: "Developed a custom streaming system that loads/unloads assets dynamically based on player position"
-                },
-                {
-                    challenge: "Creating responsive combat mechanics",
-                    solution: "Used state machines and animation curves to create fluid, responsive combat animations"
-                }
-            ],
-            results: [
-                { metric: "15k+", label: "Lines of code" },
-                { metric: "6", label: "Months development" },
-                { metric: "Solo", label: "Development" }
-            ]
-        },
-        {
-            title: "Neon Racing Pro",
-            subtitle: "Unreal Engine Racing Simulator",
-            overview: "A high-performance Unreal Engine racing simulator showcasing advanced physics implementation, vehicle dynamics, and multiplayer architecture. This project demonstrates expertise in C++ programming, network optimization, and real-time systems development.",
-            features: [
-                "Advanced vehicle physics and dynamics",
-                "16-player multiplayer support",
-                "Dynamic weather and time systems",
-                "Vehicle customization and tuning",
-                "Multiple racing modes and tracks",
-                "Steam integration for leaderboards"
-            ],
-            techStack: [
-                { name: "Unreal Engine 5", description: "Primary game development platform" },
-                { name: "C++", description: "Core programming language" },
-                { name: "Chaos Physics", description: "Advanced physics simulation" },
-                { name: "Steamworks SDK", description: "Steam integration and multiplayer" }
-            ],
-            challenges: [
-                {
-                    challenge: "Optimizing network performance for 16 players",
-                    solution: "Implemented client-side prediction and server reconciliation techniques"
-                },
-                {
-                    challenge: "Creating realistic vehicle physics",
-                    solution: "Used Chaos Physics with custom vehicle models and tire physics"
-                }
-            ],
-            results: [
-                { metric: "8", label: "Months development" },
-                { metric: "3", label: "Team members" },
-                { metric: "16", label: "Player multiplayer" }
-            ]
-        },
-        {
-            title: "Puzzle Master Mobile",
-            subtitle: "Cross-Platform Mobile Puzzle Game",
-            overview: "A cross-platform mobile puzzle game optimized for performance and user engagement. Features adaptive difficulty systems, social integration, and monetization strategies. Demonstrates mobile-first development approach and platform optimization.",
-            features: [
-                "200+ progressively challenging levels",
-                "Adaptive difficulty system",
-                "Social leaderboards and achievements",
-                "In-app purchases and ad integration",
-                "Offline play capability",
-                "Cross-platform save synchronization"
-            ],
-            techStack: [
-                { name: "Unity Mobile", description: "Mobile-optimized Unity setup" },
-                { name: "C#", description: "Game logic and systems programming" },
-                { name: "Firebase", description: "Backend services and analytics" },
-                { name: "Unity Ads", description: "Ad integration and monetization" }
-            ],
-            challenges: [
-                {
-                    challenge: "Optimizing performance for low-end devices",
-                    solution: "Implemented asset bundling, texture compression, and object pooling"
-                },
-                {
-                    challenge: "Creating engaging puzzle mechanics",
-                    solution: "Used procedural generation and player behavior analysis"
-                }
-            ],
-            results: [
-                { metric: "4", label: "Months development" },
-                { metric: "200+", label: "Game levels" },
-                { metric: "iOS/Android", label: "Platforms" }
-            ]
-        },
-        {
-            title: "Multiplayer Arena",
-            subtitle: "Competitive Multiplayer Battle Arena",
-            overview: "A competitive multiplayer battle arena featuring real-time combat systems, network synchronization, and anti-cheat mechanisms. Demonstrates expertise in network programming, server architecture, and competitive game design principles.",
-            features: [
-                "Real-time multiplayer combat",
-                "Ranked matchmaking system",
-                "Multiple character classes and abilities",
-                "Anti-cheat and security systems",
-                "Spectator mode and replay system",
-                "Custom game modes and maps"
-            ],
-            techStack: [
-                { name: "Unity", description: "Game development platform" },
-                { name: "Mirror Networking", description: "High-level networking framework" },
-                { name: "Photon", description: "Real-time multiplayer services" },
-                { name: "MLAPI", description: "Low-level networking API" }
-            ],
-            challenges: [
-                {
-                    challenge: "Implementing lag compensation",
-                    solution: "Used client-side prediction and server authority with rollback"
-                },
-                {
-                    challenge: "Preventing cheating in competitive environment",
-                    solution: "Implemented server-side validation and anti-cheat systems"
-                }
-            ],
-            results: [
-                { metric: "10", label: "Months development" },
-                { metric: "5", label: "Team members" },
-                { metric: "Ranked", label: "Matchmaking" }
-            ]
-        }
-    ];
+    let projects = [];
 
-    // Open modal when clicking on project cards
-    projectCards.forEach((card, index) => {
-        card.addEventListener('click', function() {
-            currentProjectIndex = index;
-            openProjectModal(projects[index]);
+    // Load projects dynamically
+    async function loadProjects() {
+        try {
+            const response = await fetch('data/projects.json');
+            const data = await response.json();
+            projects = data.projects || [];
+            
+            // Render projects
+            renderProjects();
+            
+            // Initialize filter functionality
+            initializeFilters();
+            
+        } catch (error) {
+            console.error('Failed to load projects:', error);
+            // Show error message in projects grid
+            const projectsGrid = document.getElementById('projectsGrid');
+            if (projectsGrid) {
+                projectsGrid.innerHTML = `
+                    <div class="error-message">
+                        <div class="error-icon">⚠️</div>
+                        <h3>Failed to load projects</h3>
+                        <p>Please check your internet connection and try again later.</p>
+                    </div>
+                `;
+            }
+            projects = [];
+        }
+    }
+
+    // Render project cards
+    function renderProjects() {
+        const projectsGrid = document.getElementById('projectsGrid');
+        if (!projectsGrid) return;
+
+        // Clear existing content
+        projectsGrid.innerHTML = '';
+
+        if (projects.length === 0) {
+            projectsGrid.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-icon">📁</div>
+                    <h3>No Projects Available</h3>
+                    <p>Check back soon for new projects!</p>
+                </div>
+            `;
+            return;
+        }
+
+        // Create and append project cards
+        projects.forEach((project, index) => {
+            const card = createProjectCard(project, index);
+            projectsGrid.appendChild(card);
         });
-    });
+
+        // Attach event listeners to new cards
+        attachProjectCardListeners();
+    }
+
+    // Create project card element
+    function createProjectCard(project, index) {
+        const card = document.createElement('div');
+        card.className = `project-card ${project.featured ? 'featured' : ''}`;
+        card.dataset.category = project.category ? project.category.join(' ') : '';
+        
+        // Get the first image or use placeholder
+        const imageUrl = project.images?.hero || project.images?.thumbnail || '';
+        
+        card.innerHTML = `
+            ${project.featured ? '<div class="project-badge">Featured Project</div>' : ''}
+            <div class="project-image">
+                ${imageUrl ? 
+                    `<img src="${imageUrl}" alt="${project.title}" loading="lazy">` :
+                    `<div class="placeholder-image"><span>${project.title}</span></div>`
+                }
+            </div>
+            <div class="project-content">
+                <h3 class="project-title">${escapeHtml(project.title)}</h3>
+                <p class="project-description">
+                    ${escapeHtml(project.description || project.overview || '')}
+                </p>
+                <div class="project-tech">
+                    ${project.technologies && project.technologies.length > 0 ? 
+                        project.technologies.slice(0, 4).map(tech => 
+                            `<span class="tech-tag">${escapeHtml(tech.name || tech)}</span>`
+                        ).join('') :
+                        project.techStack && project.techStack.length > 0 ?
+                        project.techStack.slice(0, 4).map(tech => 
+                            `<span class="tech-tag">${escapeHtml(tech.name || tech)}</span>`
+                        ).join('') : ''
+                    }
+                </div>
+                <div class="project-links">
+                    ${project.links?.demo ? 
+                        `<a href="${project.links.demo}" class="project-link" target="_blank">View Demo</a>` : 
+                        '<span class="project-link disabled">Demo</span>'
+                    }
+                    ${project.links?.github ? 
+                        `<a href="${project.links.github}" class="project-link" target="_blank">Source Code</a>` : 
+                        '<span class="project-link disabled">GitHub</span>'
+                    }
+                </div>
+                <div class="project-stats">
+                    ${project.stats?.developmentTime ? 
+                        `<div class="project-stat">
+                            <span class="project-stat-icon">⏱️</span>
+                            <span>${project.stats.developmentTime}</span>
+                        </div>` : ''
+                    }
+                    ${project.stats?.teamSize ? 
+                        `<div class="project-stat">
+                            <span class="project-stat-icon">👥</span>
+                            <span>${project.stats.teamSize}</span>
+                        </div>` : ''
+                    }
+                    ${project.stats?.linesOfCode ? 
+                        `<div class="project-stat">
+                            <span class="project-stat-icon">📦</span>
+                            <span>${project.stats.linesOfCode}</span>
+                        </div>` : ''
+                    }
+                </div>
+            </div>
+        `;
+
+        return card;
+    }
+
+    // Escape HTML to prevent XSS
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    // Attach event listeners to project cards
+    function attachProjectCardListeners() {
+        const projectCards = document.querySelectorAll('.project-card');
+        projectCards.forEach((card, index) => {
+            card.addEventListener('click', function() {
+                currentProjectIndex = index;
+                openProjectModal(projects[index]);
+            });
+        });
+    }
+
+    // Initialize filter functionality
+    function initializeFilters() {
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        
+        filterButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Remove active class from all buttons
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                
+                const filter = this.dataset.filter;
+                
+                // Show/hide project cards based on filter
+                const projectCards = document.querySelectorAll('.project-card');
+                projectCards.forEach(card => {
+                    if (filter === 'all' || card.dataset.category.includes(filter)) {
+                        card.style.display = 'block';
+                        // Force a reflow before applying transitions
+                        card.offsetHeight;
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    } else {
+                        card.style.opacity = '0';
+                        card.style.transform = 'translateY(20px)';
+                        // Hide card after transition completes
+                        setTimeout(() => {
+                            if (card.style.opacity === '0') {
+                                card.style.display = 'none';
+                            }
+                        }, 300);
+                    }
+                });
+            });
+        });
+    }
+
+    // Load projects on initialization
+    loadProjects();
 
     // Close modal
     function closeModal() {
@@ -301,96 +340,136 @@ function initProjectModal() {
         // Update modal content
         document.getElementById('modalTitle').textContent = project.title;
         document.getElementById('modalSubtitle').textContent = project.subtitle;
-        document.getElementById('modalOverview').textContent = project.overview;
+        document.getElementById('modalOverview').textContent = project.description || project.overview || '';
+        
+        // Update hero image
+        const modalHeroImage = document.getElementById('modalHeroImage');
+        const imageUrl = project.images?.hero || project.images?.thumbnail || '';
+        if (imageUrl) {
+            modalHeroImage.innerHTML = `<img src="${imageUrl}" alt="${project.title}">`;
+        } else {
+            modalHeroImage.innerHTML = `<div class="placeholder-image"><span>${project.title}</span></div>`;
+        }
         
         // Update features
         const featuresList = document.getElementById('modalFeatures');
         featuresList.innerHTML = '';
-        project.features.forEach(feature => {
-            const li = document.createElement('li');
-            li.textContent = feature;
-            featuresList.appendChild(li);
-        });
+        if (project.features && Array.isArray(project.features)) {
+            project.features.forEach(feature => {
+                const li = document.createElement('li');
+                li.textContent = feature;
+                featuresList.appendChild(li);
+            });
+        }
         
         // Update tech stack
         const techStack = document.getElementById('modalTechStack');
         techStack.innerHTML = '';
-        project.techStack.forEach(tech => {
-            const techDiv = document.createElement('div');
-            techDiv.className = 'tech-item-expanded';
-            techDiv.innerHTML = `
-                <h4>${tech.name}</h4>
-                <p>${tech.description}</p>
-            `;
-            techStack.appendChild(techDiv);
-        });
+        if (project.technologies && Array.isArray(project.technologies)) {
+            project.technologies.forEach(tech => {
+                const techDiv = document.createElement('div');
+                techDiv.className = 'tech-item-expanded';
+                techDiv.innerHTML = `
+                    <h4>${tech.name || tech}</h4>
+                    <p>${tech.description || ''}</p>
+                `;
+                techStack.appendChild(techDiv);
+            });
+        } else if (project.techStack && Array.isArray(project.techStack)) {
+            // Support for legacy techStack format
+            project.techStack.forEach(tech => {
+                const techDiv = document.createElement('div');
+                techDiv.className = 'tech-item-expanded';
+                techDiv.innerHTML = `
+                    <h4>${tech.name || tech}</h4>
+                    <p>${tech.description || ''}</p>
+                `;
+                techStack.appendChild(techDiv);
+            });
+        }
         
         // Update challenges
         const challenges = document.getElementById('modalChallenges');
         challenges.innerHTML = '';
-        project.challenges.forEach(challenge => {
-            const challengeDiv = document.createElement('div');
-            challengeDiv.className = 'challenge-item';
-            challengeDiv.innerHTML = `
-                <h4>${challenge.challenge}</h4>
-                <p>${challenge.solution}</p>
-            `;
-            challenges.appendChild(challengeDiv);
-        });
+        if (project.challenges && Array.isArray(project.challenges)) {
+            project.challenges.forEach(challenge => {
+                const challengeDiv = document.createElement('div');
+                challengeDiv.className = 'challenge-item';
+                challengeDiv.innerHTML = `
+                    <h4>${challenge.challenge}</h4>
+                    <p>${challenge.solution}</p>
+                `;
+                challenges.appendChild(challengeDiv);
+            });
+        }
         
-        // Update results
+        // Update gallery
+        const gallery = document.getElementById('modalGallery');
+        gallery.innerHTML = '';
+        if (project.images?.gallery && Array.isArray(project.images.gallery)) {
+            project.images.gallery.forEach(image => {
+                const galleryItem = document.createElement('div');
+                galleryItem.className = 'gallery-item';
+                galleryItem.innerHTML = `
+                    <img src="${image.url}" alt="${image.caption || ''}" loading="lazy">
+                `;
+                gallery.appendChild(galleryItem);
+            });
+        }
+        
+        // Update results/stats
         const results = document.getElementById('modalResults');
         results.innerHTML = '';
-        project.results.forEach(result => {
-            const resultDiv = document.createElement('div');
-            resultDiv.className = 'metric-item';
-            resultDiv.innerHTML = `
-                <div class="metric-number">${result.metric}</div>
-                <div class="metric-label">${result.label}</div>
-            `;
-            results.appendChild(resultDiv);
-        });
+        let stats = [];
+        
+        // Try to get stats from different possible locations
+        if (project.results) {
+            stats = project.results;
+        } else if (project.stats) {
+            // Convert stats format to results format
+            Object.entries(project.stats).forEach(([key, value]) => {
+                stats.push({
+                    metric: value,
+                    label: key.replace(/([A-Z])/g, ' $1').trim() // Convert camelCase to readable text
+                });
+            });
+        }
+        
+        if (Array.isArray(stats)) {
+            stats.forEach(result => {
+                const resultDiv = document.createElement('div');
+                resultDiv.className = 'metric-item';
+                resultDiv.innerHTML = `
+                    <div class="metric-number">${result.metric}</div>
+                    <div class="metric-label">${result.label}</div>
+                `;
+                results.appendChild(resultDiv);
+            });
+        }
+        
+        // Update modal links
+        const modalDemoLink = document.getElementById('modalDemoLink');
+        const modalGithubLink = document.getElementById('modalGithubLink');
+        
+        if (project.links?.demo) {
+            modalDemoLink.href = project.links.demo;
+            modalDemoLink.style.display = 'inline-block';
+        } else {
+            modalDemoLink.style.display = 'none';
+        }
+        
+        if (project.links?.github) {
+            modalGithubLink.href = project.links.github;
+            modalGithubLink.style.display = 'inline-block';
+        } else {
+            modalGithubLink.style.display = 'none';
+        }
         
         // Show modal
         modal.classList.add('active');
         document.body.style.overflow = 'hidden';
     }
-
-    // Project filter functionality
-    const filterButtons = document.querySelectorAll('.filter-btn');
-    
-    filterButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            // Remove active class from all buttons
-            filterButtons.forEach(btn => btn.classList.remove('active'));
-            this.classList.add('active');
-            
-            const filter = this.dataset.filter;
-            
-            // Show/hide project cards based on filter
-            projectCards.forEach(card => {
-                if (filter === 'all' || card.dataset.category.includes(filter)) {
-                    card.style.display = 'block';
-                    // Force a reflow before applying transitions
-                    card.offsetHeight;
-                    card.style.opacity = '1';
-                    card.style.transform = 'translateY(0)';
-                } else {
-                    card.style.opacity = '0';
-                    card.style.transform = 'translateY(20px)';
-                    // Hide card after transition completes
-                    setTimeout(() => {
-                        if (card.style.opacity === '0') {
-                            card.style.display = 'none';
-                        }
-                    }, 300);
-                }
-            });
-        });
-    });
 }
-
-
 
 // Animations and Interactive Elements
 function initAnimations() {

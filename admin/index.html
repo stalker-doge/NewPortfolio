@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Admin - Lucian Matan Portfolio</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="admin-body">
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-screen">
+        <div class="login-container">
+            <div class="login-header">
+                <h1>Project Admin</h1>
+                <p>Lucian Matan Portfolio Management</p>
+            </div>
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <label for="adminPassword">Admin Password</label>
+                    <input type="password" id="adminPassword" required placeholder="Enter admin password">
+                </div>
+                <button type="submit" class="btn btn-primary">Login</button>
+            </form>
+            <div id="loginError" class="error-message" style="display: none;"></div>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div id="adminDashboard" class="admin-dashboard" style="display: none;">
+        <!-- Admin Header -->
+        <header class="admin-header">
+            <div class="admin-container">
+                <div class="admin-brand">
+                    <h1>Project Admin</h1>
+                    <span>Portfolio Management System</span>
+                </div>
+                <nav class="admin-nav">
+                    <button class="nav-btn active" data-view="projects">Projects</button>
+                    <button class="nav-btn" data-view="settings">Settings</button>
+                    <button id="logoutBtn" class="nav-btn logout">Logout</button>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Projects View -->
+        <div id="projectsView" class="admin-view active">
+            <div class="admin-container">
+                <div class="view-header">
+                    <h2>Project Management</h2>
+                    <div class="view-actions">
+                        <button id="addProjectBtn" class="btn btn-primary">
+                            <span>+</span> Add New Project
+                        </button>
+                        <button id="refreshBtn" class="btn btn-secondary">
+                            <span>↻</span> Refresh
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Projects Grid -->
+                <div id="projectsGrid" class="admin-projects-grid">
+                    <!-- Projects will be loaded here dynamically -->
+                </div>
+
+                <!-- Loading State -->
+                <div id="loadingState" class="loading-state" style="display: none;">
+                    <div class="loading-spinner"></div>
+                    <p>Loading projects...</p>
+                </div>
+
+                <!-- Error State -->
+                <div id="errorState" class="error-state" style="display: none;">
+                    <div class="error-icon">⚠️</div>
+                    <h3>Error Loading Projects</h3>
+                    <p id="errorMessage">Unable to load projects. Please try again.</p>
+                    <button id="retryBtn" class="btn btn-primary">Retry</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings View -->
+        <div id="settingsView" class="admin-view">
+            <div class="admin-container">
+                <div class="view-header">
+                    <h2>Admin Settings</h2>
+                </div>
+                
+                <div class="settings-section">
+                    <h3>System Information</h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <label>Repository</label>
+                            <span id="repoInfo">Loading...</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Last Updated</label>
+                            <span id="lastUpdated">Loading...</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Total Projects</label>
+                            <span id="totalProjects">Loading...</span>
+                        </div>
+                        <div class="info-item">
+                            <label>API Status</label>
+                            <span id="apiStatus" class="status-pending">Checking...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3>Cache Management</h3>
+                    <div class="cache-actions">
+                        <button id="clearCacheBtn" class="btn btn-secondary">Clear Cache</button>
+                        <button id="exportDataBtn" class="btn btn-secondary">Export Data</button>
+                        <button id="importDataBtn" class="btn btn-secondary">Import Data</button>
+                        <input type="file" id="importFile" accept=".json" style="display: none;">
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3>Security</h3>
+                    <div class="security-actions">
+                        <button id="changePasswordBtn" class="btn btn-secondary">Change Admin Password</button>
+                        <button id="regenerateTokenBtn" class="btn btn-secondary">Regenerate API Token</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Project Modal -->
+    <div id="projectModal" class="modal">
+        <div class="modal-overlay" onclick="closeProjectModal()"></div>
+        <div class="modal-container">
+            <div class="modal-header">
+                <h2 id="modalTitle">Add New Project</h2>
+                <button class="modal-close" onclick="closeProjectModal()">&times;</button>
+            </div>
+            
+            <form id="projectForm" class="project-form">
+                <div class="form-tabs">
+                    <button type="button" class="tab-btn active" data-tab="basic">Basic Info</button>
+                    <button type="button" class="tab-btn" data-tab="content">Content</button>
+                    <button type="button" class="tab-btn" data-tab="media">Media</button>
+                    <button type="button" class="tab-btn" data-tab="advanced">Advanced</button>
+                </div>
+
+                <!-- Basic Info Tab -->
+                <div class="tab-content active" data-tab="basic">
+                    <div class="form-group">
+                        <label for="projectTitle">Project Title *</label>
+                        <input type="text" id="projectTitle" required placeholder="Enter project title">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="projectSubtitle">Subtitle</label>
+                        <input type="text" id="projectSubtitle" placeholder="Enter project subtitle">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="projectDescription">Description *</label>
+                        <textarea id="projectDescription" required rows="4" placeholder="Enter project description"></textarea>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="projectStatus">Status</label>
+                            <select id="projectStatus">
+                                <option value="draft">Draft</option>
+                                <option value="published">Published</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="projectFeatured">Featured</label>
+                            <select id="projectFeatured">
+                                <option value="false">No</option>
+                                <option value="true">Yes</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="projectPublishDate">Publish Date</label>
+                        <input type="date" id="projectPublishDate">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Categories *</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="category" value="unity">
+                                <span>Unity</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="category" value="unreal">
+                                <span>Unreal Engine</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="category" value="mobile">
+                                <span>Mobile</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="category" value="multiplayer">
+                                <span>Multiplayer</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="category" value="featured">
+                                <span>Featured</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Content Tab -->
+                <div class="tab-content" data-tab="content">
+                    <div class="form-group">
+                        <label>Technologies</label>
+                        <div class="tag-input-container">
+                            <input type="text" id="techInput" placeholder="Add technology and press Enter">
+                            <div id="techTags" class="tag-list"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Features</label>
+                        <div class="feature-list-container">
+                            <div id="featuresList" class="feature-list"></div>
+                            <button type="button" id="addFeatureBtn" class="btn btn-secondary">+ Add Feature</button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Links</label>
+                        <div class="links-container">
+                            <div class="link-input-group">
+                                <input type="url" id="demoLink" placeholder="Demo URL">
+                                <label>Demo</label>
+                            </div>
+                            <div class="link-input-group">
+                                <input type="url" id="githubLink" placeholder="GitHub URL">
+                                <label>GitHub</label>
+                            </div>
+                            <div class="link-input-group">
+                                <input type="url" id="downloadLink" placeholder="Download URL">
+                                <label>Download</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Media Tab -->
+                <div class="tab-content" data-tab="media">
+                    <div class="form-group">
+                        <label>Hero Image</label>
+                        <div class="image-upload-container">
+                            <input type="file" id="heroImage" accept="image/*" style="display: none;">
+                            <button type="button" class="btn btn-secondary" onclick="document.getElementById('heroImage').click()">
+                                Upload Hero Image
+                            </button>
+                            <div id="heroImagePreview" class="image-preview"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Thumbnail Image</label>
+                        <div class="image-upload-container">
+                            <input type="file" id="thumbnailImage" accept="image/*" style="display: none;">
+                            <button type="button" class="btn btn-secondary" onclick="document.getElementById('thumbnailImage').click()">
+                                Upload Thumbnail
+                            </button>
+                            <div id="thumbnailImagePreview" class="image-preview"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Gallery Images</label>
+                        <div class="gallery-container">
+                            <div id="galleryImages" class="gallery-grid"></div>
+                            <button type="button" id="addGalleryImageBtn" class="btn btn-secondary">+ Add Gallery Image</button>
+                            <input type="file" id="galleryImageInput" accept="image/*" multiple style="display: none;">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Advanced Tab -->
+                <div class="tab-content" data-tab="advanced">
+                    <div class="form-group">
+                        <label>Development Stats</label>
+                        <div class="stats-container">
+                            <div class="stat-input-group">
+                                <input type="text" id="devTime" placeholder="e.g., 6 months">
+                                <label>Development Time</label>
+                            </div>
+                            <div class="stat-input-group">
+                                <input type="text" id="teamSize" placeholder="e.g., Solo, 3-person team">
+                                <label>Team Size</label>
+                            </div>
+                            <div class="stat-input-group">
+                                <input type="text" id="codeLines" placeholder="e.g., 15k+">
+                                <label>Lines of Code</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Challenges & Solutions</label>
+                        <div class="challenges-container">
+                            <div id="challengesList" class="challenges-list"></div>
+                            <button type="button" id="addChallengeBtn" class="btn btn-secondary">+ Add Challenge</button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>SEO Settings</label>
+                        <div class="seo-container">
+                            <input type="text" id="metaTitle" placeholder="Meta Title">
+                            <textarea id="metaDescription" rows="3" placeholder="Meta Description"></textarea>
+                            <div class="tag-input-container">
+                                <input type="text" id="keywordInput" placeholder="Add keyword and press Enter">
+                                <div id="keywordTags" class="tag-list"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeProjectModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Project</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmModal" class="modal">
+        <div class="modal-overlay" onclick="closeConfirmModal()"></div>
+        <div class="modal-container confirm-modal">
+            <div class="modal-header">
+                <h3 id="confirmTitle">Confirm Action</h3>
+            </div>
+            <div class="modal-body">
+                <p id="confirmMessage">Are you sure you want to proceed?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeConfirmModal()">Cancel</button>
+                <button id="confirmBtn" class="btn btn-primary">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="../js/github-api.js"></script>
+    <script src="js/admin-main.js"></script>
+</body>
+</html>

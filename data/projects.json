@@ -1,0 +1,209 @@
+{
+  "projects": [
+    {
+      "id": "cyber-quest-rpg",
+      "title": "Cyber Quest RPG",
+      "subtitle": "Unity-built Cyberpunk RPG",
+      "description": "Comprehensive Unity-built cyberpunk RPG demonstrating advanced gameplay systems, narrative design, and visual effects implementation. Features complex character progression, dynamic combat mechanics, and immersive world-building.",
+      "category": ["unity", "featured"],
+      "featured": true,
+      "status": "published",
+      "publishDate": "2024-01-15",
+      "images": {
+        "hero": "assets/projects/cyber-quest-rpg/hero.jpg",
+        "thumbnail": "assets/projects/cyber-quest-rpg/thumbnail.jpg",
+        "gallery": [
+          {
+            "url": "assets/projects/cyber-quest-rpg/gallery-1.jpg",
+            "caption": "Gameplay screenshot"
+          }
+        ]
+      },
+      "links": {
+        "demo": "#",
+        "github": "#",
+        "download": "#"
+      },
+      "technologies": ["Unity", "C#", "DOTween", "Post Processing"],
+      "features": [
+        "Dynamic combat system with multiple weapon types",
+        "Branching narrative with player choices affecting story",
+        "Character customization and progression system",
+        "Advanced visual effects and post-processing",
+        "Open-world exploration with dynamic events",
+        "Inventory and crafting system"
+      ],
+      "stats": {
+        "developmentTime": "6 months",
+        "teamSize": "Solo",
+        "linesOfCode": "15k+"
+      },
+      "challenges": [
+        {
+          "challenge": "Implementing seamless open-world transitions",
+          "solution": "Developed a custom streaming system that loads/unloads assets dynamically based on player position"
+        },
+        {
+          "challenge": "Creating responsive combat mechanics",
+          "solution": "Used state machines and animation curves to create fluid, responsive combat animations"
+        }
+      ],
+      "seo": {
+        "metaTitle": "Cyber Quest RPG - Game Development Project",
+        "metaDescription": "A comprehensive Unity-built cyberpunk RPG featuring advanced gameplay systems, narrative design, and visual effects implementation.",
+        "keywords": ["unity", "rpg", "cyberpunk", "game development", "csharp"]
+      },
+      "lastModified": "2024-01-20T10:00:00Z"
+    },
+    {
+      "id": "neon-racing-pro",
+      "title": "Neon Racing Pro",
+      "subtitle": "Unreal Engine Racing Simulator",
+      "description": "High-performance Unreal Engine racing simulator showcasing advanced physics implementation, vehicle dynamics, and multiplayer architecture. Demonstrates expertise in C++ programming, network optimization, and real-time systems development.",
+      "category": ["unreal", "multiplayer"],
+      "featured": false,
+      "status": "published",
+      "publishDate": "2024-01-10",
+      "images": {
+        "hero": "assets/projects/neon-racing-pro/hero.jpg",
+        "thumbnail": "assets/projects/neon-racing-pro/thumbnail.jpg",
+        "gallery": []
+      },
+      "links": {
+        "demo": "#",
+        "github": "#",
+        "download": "#"
+      },
+      "technologies": ["Unreal Engine 5", "C++", "Chaos Physics", "Steamworks"],
+      "features": [
+        "Advanced vehicle physics and dynamics",
+        "16-player multiplayer support",
+        "Dynamic weather and time systems",
+        "Vehicle customization and tuning",
+        "Multiple racing modes and tracks",
+        "Steam integration for leaderboards"
+      ],
+      "stats": {
+        "developmentTime": "8 months",
+        "teamSize": "3-person team",
+        "multiplayer": "16-player multiplayer"
+      },
+      "challenges": [
+        {
+          "challenge": "Optimizing network performance for 16 players",
+          "solution": "Implemented client-side prediction and server reconciliation techniques"
+        },
+        {
+          "challenge": "Creating realistic vehicle physics",
+          "solution": "Used Chaos Physics with custom vehicle models and tire physics"
+        }
+      ],
+      "seo": {
+        "metaTitle": "Neon Racing Pro - Unreal Engine Racing Game",
+        "metaDescription": "High-performance Unreal Engine racing simulator with advanced physics, multiplayer support, and realistic vehicle dynamics.",
+        "keywords": ["unreal engine", "racing game", "cpp", "multiplayer", "physics"]
+      },
+      "lastModified": "2024-01-20T10:00:00Z"
+    },
+    {
+      "id": "puzzle-master-mobile",
+      "title": "Puzzle Master Mobile",
+      "subtitle": "Cross-Platform Mobile Puzzle Game",
+      "description": "Cross-platform mobile puzzle game optimized for performance and user engagement. Features adaptive difficulty systems, social integration, and monetization strategies. Demonstrates mobile-first development approach and platform optimization.",
+      "category": ["unity", "mobile"],
+      "featured": false,
+      "status": "published",
+      "publishDate": "2024-01-05",
+      "images": {
+        "hero": "assets/projects/puzzle-master-mobile/hero.jpg",
+        "thumbnail": "assets/projects/puzzle-master-mobile/thumbnail.jpg",
+        "gallery": []
+      },
+      "links": {
+        "demo": "#",
+        "github": "#",
+        "download": "#"
+      },
+      "technologies": ["Unity Mobile", "C#", "Firebase", "Unity Ads"],
+      "features": [
+        "200+ progressively challenging levels",
+        "Adaptive difficulty system",
+        "Social leaderboards and achievements",
+        "In-app purchases and ad integration",
+        "Offline play capability",
+        "Cross-platform save synchronization"
+      ],
+      "stats": {
+        "developmentTime": "4 months",
+        "teamSize": "Solo",
+        "levels": "200+ levels"
+      },
+      "challenges": [
+        {
+          "challenge": "Optimizing performance for low-end devices",
+          "solution": "Implemented asset bundling, texture compression, and object pooling"
+        },
+        {
+          "challenge": "Creating engaging puzzle mechanics",
+          "solution": "Used procedural generation and player behavior analysis"
+        }
+      ],
+      "seo": {
+        "metaTitle": "Puzzle Master Mobile - Cross-Platform Puzzle Game",
+        "metaDescription": "Cross-platform mobile puzzle game with adaptive difficulty, social integration, and optimized performance for all devices.",
+        "keywords": ["mobile game", "unity", "puzzle", "firebase", "ios", "android"]
+      },
+      "lastModified": "2024-01-20T10:00:00Z"
+    },
+    {
+      "id": "multiplayer-arena",
+      "title": "Multiplayer Arena",
+      "subtitle": "Competitive Multiplayer Battle Arena",
+      "description": "Competitive multiplayer battle arena featuring real-time combat systems, network synchronization, and anti-cheat mechanisms. Demonstrates expertise in network programming, server architecture, and competitive game design principles.",
+      "category": ["unity", "multiplayer"],
+      "featured": false,
+      "status": "published",
+      "publishDate": "2024-01-01",
+      "images": {
+        "hero": "assets/projects/multiplayer-arena/hero.jpg",
+        "thumbnail": "assets/projects/multiplayer-arena/thumbnail.jpg",
+        "gallery": []
+      },
+      "links": {
+        "demo": "#",
+        "github": "#",
+        "download": "#"
+      },
+      "technologies": ["Unity", "Mirror Networking", "Photon", "MLAPI"],
+      "features": [
+        "Real-time multiplayer combat",
+        "Ranked matchmaking system",
+        "Multiple character classes and abilities",
+        "Anti-cheat and security systems",
+        "Spectator mode and replay system",
+        "Custom game modes and maps"
+      ],
+      "stats": {
+        "developmentTime": "10 months",
+        "teamSize": "5-person team",
+        "matchmaking": "Ranked matchmaking"
+      },
+      "challenges": [
+        {
+          "challenge": "Implementing lag compensation",
+          "solution": "Used client-side prediction and server authority with rollback"
+        },
+        {
+          "challenge": "Preventing cheating in competitive environment",
+          "solution": "Implemented server-side validation and anti-cheat systems"
+        }
+      ],
+      "seo": {
+        "metaTitle": "Multiplayer Arena - Competitive Battle Arena Game",
+        "metaDescription": "Competitive multiplayer battle arena with real-time combat, ranked matchmaking, and advanced anti-cheat systems.",
+        "keywords": ["multiplayer", "unity", "networking", "competitive", "anticheat"]
+      },
+      "lastModified": "2024-01-20T10:00:00Z"
+    }
+  ]
+}
