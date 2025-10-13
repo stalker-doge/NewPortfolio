@@ -9,6 +9,7 @@ class GitHubAPI {
         this.baseUrl = 'https://api.github.com';
         this.cache = new Map();
         this.cacheExpiry = 5 * 60 * 1000; // 5 minutes cache
+        this.pendingFileUpdates = new Map(); // Track pending file updates to prevent race conditions
     }
 
     // Get GitHub token from environment variable or configuration
@@ -127,28 +128,52 @@ class GitHubAPI {
         }
     }
 
-    // Update or create file in repository
+    // Update or create file in repository with race condition protection
     async updateFileContent(path, content, message = 'Update projects data') {
         // Ensure we have the correct branch
         if (!this.branch || this.branch === 'main') {
             this.branch = await this.detectRepositoryBranch();
         }
 
+        // Check if there's a pending update for this file to prevent race conditions
+        if (this.pendingFileUpdates.has(path)) {
+            console.warn(`File update already pending for ${path}, waiting...`);
+            // Wait for pending update to complete
+            let attempts = 0;
+            while (this.pendingFileUpdates.has(path) && attempts < 10) {
+                await new Promise(resolve => setTimeout(resolve, 500));
+                attempts++;
+            }
+            if (attempts >= 10) {
+                throw new Error('Timeout waiting for pending file update');
+            }
+        }
+
         try {
+            this.pendingFileUpdates.set(path, true);
+            
             const endpoint = `/repos/${this.username}/${this.repo}/contents/${path}`;
             
-            // Get current file to get SHA
+            // Get current file to get SHA - always get fresh data
             let currentFile;
-            try {
-                currentFile = await this.getFileContent(path);
-            } catch (error) {
-                if (!error.message.includes('404')) {
-                    throw error;
+            let attempts = 0;
+            const maxAttempts = 3;
+            
+            while (attempts < maxAttempts) {
+                try {
+                    currentFile = await this.getFileContent(path);
+                    break; // Success, exit retry loop
+                } catch (error) {
+                    attempts++;
+                    if (attempts >= maxAttempts) {
+                        throw error;
+                    }
+                    console.warn(`Failed to get file content (attempt ${attempts}), retrying...`);
+                    // Wait before retry
+                    await new Promise(resolve => setTimeout(resolve, 1000));
                 }
-                // File doesn't exist, create new
-                currentFile = { sha: null };
             }
-
+            
             const encodedContent = btoa(content);
             const body = {
                 message: message,
@@ -156,7 +181,8 @@ class GitHubAPI {
                 branch: this.branch
             };
 
-            if (currentFile.sha) {
+            // Only include SHA if file exists and has a valid SHA
+            if (currentFile && currentFile.sha && currentFile.sha !== null) {
                 body.sha = currentFile.sha;
             }
 
@@ -165,7 +191,7 @@ class GitHubAPI {
                 body: JSON.stringify(body)
             });
 
-            // Clear cache
+            // Clear cache for this file
             this.cache.delete(`file:${path}`);
             
             return {
@@ -176,6 +202,9 @@ class GitHubAPI {
         } catch (error) {
             console.error('Failed to update file:', error);
             throw error;
+        } finally {
+            // Clear pending update flag
+            this.pendingFileUpdates.delete(path);
         }
     }
 
@@ -197,13 +226,14 @@ class GitHubAPI {
                         
                         const endpoint = `/repos/${this.username}/${this.repo}/contents/${path}`;
                         
-                        // Check if file exists
+                        // Check if file exists - always get fresh data
                         let sha = null;
                         try {
                             const existingFile = await this.getFileContent(path);
                             sha = existingFile.sha;
                         } catch (error) {
                             // File doesn't exist, that's fine
+                            console.log(`File ${path} doesn't exist, will create new`);
                         }
 
                         const body = {
@@ -251,7 +281,7 @@ class GitHubAPI {
         try {
             const endpoint = `/repos/${this.username}/${this.repo}/contents/${path}`;
             
-            // Get current file SHA
+            // Get current file SHA - always get fresh data
             const currentFile = await this.getFileContent(path);
             
             if (!currentFile.sha) {
@@ -418,6 +448,7 @@ class GitHubAPI {
     // Clear cache
     clearCache() {
         this.cache.clear();
+        this.pendingFileUpdates.clear();
     }
 
     // Get repository info
