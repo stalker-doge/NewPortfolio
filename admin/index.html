@@ -112,6 +112,28 @@
                 </div>
 
                 <div class="settings-section">
+                    <h3>GitHub Token Configuration</h3>
+                    <div class="token-config">
+                        <div class="token-status" id="tokenStatus">Token: Not configured</div>
+                        <form id="tokenForm" class="token-form">
+                            <div class="form-group">
+                                <label for="githubToken">GitHub Personal Access Token</label>
+                                <input type="password" id="githubToken" placeholder="Enter your GitHub token" required>
+                                <small class="help-text">
+                                    Create a token with 'repo' scope at GitHub → Settings → Developer Settings → Personal Access Tokens
+                                </small>
+                            </div>
+                            <div class="token-actions">
+                                <button type="submit" id="saveTokenBtn" class="btn btn-primary">Save Token</button>
+                                <button type="button" class="btn btn-link" onclick="window.open('https://github.com/settings/tokens', '_blank')">
+                                    Create New Token
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="settings-section">
                     <h3>Cache Management</h3>
                     <div class="cache-actions">
                         <button id="clearCacheBtn" class="btn btn-secondary">Clear Cache</button>
