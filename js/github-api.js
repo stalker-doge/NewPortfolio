@@ -5,7 +5,7 @@ class GitHubAPI {
         this.token = this.getGitHubToken();
         this.username = 'stalker-doge';
         this.repo = 'NewPortfolio';
-        this.branch = 'main';
+        this.branch = 'main'; // Will be auto-detected
         this.baseUrl = 'https://api.github.com';
         this.cache = new Map();
         this.cacheExpiry = 5 * 60 * 1000; // 5 minutes cache
@@ -71,8 +71,24 @@ class GitHubAPI {
         }
     }
 
+    // Auto-detect repository branch
+    async detectRepositoryBranch() {
+        try {
+            const repoInfo = await this.getRepositoryInfo();
+            return repoInfo.default_branch || 'main';
+        } catch (error) {
+            console.warn('Failed to detect repository branch, using default:', error);
+            return 'main'; // Fallback to main
+        }
+    }
+
     // Get file content from repository
     async getFileContent(path) {
+        // Ensure we have the correct branch
+        if (!this.branch || this.branch === 'main') {
+            this.branch = await this.detectRepositoryBranch();
+        }
+
         const cacheKey = `file:${path}`;
         const cached = this.cache.get(cacheKey);
         
@@ -81,7 +97,7 @@ class GitHubAPI {
         }
 
         try {
-            const endpoint = `/repos/${this.username}/${this.repo}/contents/${path}`;
+            const endpoint = `/repos/${this.username}/${this.repo}/contents/${path}?ref=${this.branch}`;
             const response = await this.apiRequest(endpoint);
             
             if (response.type === 'file') {
@@ -108,6 +124,11 @@ class GitHubAPI {
 
     // Update or create file in repository
     async updateFileContent(path, content, message = 'Update projects data') {
+        // Ensure we have the correct branch
+        if (!this.branch || this.branch === 'main') {
+            this.branch = await this.detectRepositoryBranch();
+        }
+
         try {
             const endpoint = `/repos/${this.username}/${this.repo}/contents/${path}`;
             
@@ -155,6 +176,11 @@ class GitHubAPI {
 
     // Upload image to repository
     async uploadImage(projectId, imageFile, imageName) {
+        // Ensure we have the correct branch
+        if (!this.branch || this.branch === 'main') {
+            this.branch = await this.detectRepositoryBranch();
+        }
+
         try {
             const path = `assets/projects/${projectId}/${imageName}`;
             const reader = new FileReader();
@@ -212,6 +238,11 @@ class GitHubAPI {
 
     // Delete image from repository
     async deleteImage(path, message = 'Delete image') {
+        // Ensure we have the correct branch
+        if (!this.branch || this.branch === 'main') {
+            this.branch = await this.detectRepositoryBranch();
+        }
+
         try {
             const endpoint = `/repos/${this.username}/${this.repo}/contents/${path}`;
             

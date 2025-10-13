@@ -136,6 +136,51 @@ this.repo = 'your-actual-repo-name';      // Your repository name
 4. **Reconfigure token** in admin panel
 5. **Test connection** by saving token
 
+### **🚨 CRITICAL: Can Create Drafts but Publishing Fails**
+
+If you can create drafts but publishing fails with the same error, the issue is specifically with **branch configuration**:
+
+#### **Root Cause**
+- **Creating drafts**: Works because system creates new `data/projects.json` file
+- **Publishing**: Fails because system needs to update existing file with correct SHA
+- **Branch mismatch**: System uses wrong branch name for file operations
+
+#### **Solution: Automatic Branch Detection**
+The system now includes automatic branch detection:
+
+```javascript
+// In js/github-api.js - NEW FEATURE
+async detectRepositoryBranch() {
+    try {
+        const repoInfo = await this.getRepositoryInfo();
+        return repoInfo.default_branch || 'main';
+    } catch (error) {
+        console.warn('Failed to detect repository branch, using default:', error);
+        return 'main'; // Fallback to main
+    }
+}
+```
+
+#### **How It Works**
+1. **Auto-detects branch**: System automatically detects repository's default branch
+2. **Handles both `main` and `master`**: Works with any branch name
+3. **Fallback to `main`**: If detection fails, uses safe default
+4. **Applies to all operations**: File creation, updates, uploads, deletions
+
+#### **Manual Branch Check**
+To verify your repository's default branch:
+1. Go to `https://github.com/stalker-doge/NewPortfolio`
+2. Look at the branch dropdown (usually shows "main" or "master")
+3. System will automatically detect and use this branch
+
+#### **Fix Steps for Publishing Issues**
+1. **Access admin panel**: `/admin/`
+2. **Login**: `portfolio2024`
+3. **Configure token**: Enter GitHub token in Settings
+4. **Save token**: Click "Save Token" button
+5. **Test publishing**: Try to publish a draft project
+6. **System will**: Auto-detect correct branch and use it
+
 ## System Architecture
 
 ### 1. Data Structure (`data/projects.json`)
@@ -208,6 +253,7 @@ The system includes a comprehensive GitHub API wrapper that handles:
 - **Caching**: Performance optimization through local caching
 - **Error Handling**: Robust error management and recovery
 - **Secure Token Management**: Environment variables and localStorage
+- **Automatic Branch Detection**: Detects and uses correct repository branch
 
 ### 3. Admin Interface (`admin/`)
 
@@ -412,24 +458,32 @@ The main portfolio (`index.html`, `js/script.js`) dynamically:
      - Check username/repository name in API configuration
    - **Prevention**: Always verify token scopes and repository access
 
-3. **Projects Not Loading**:
+3. **Can Create Drafts but Publishing Fails**:
+   - **Cause**: Branch configuration mismatch
+   - **Solution**: 
+     - System now auto-detects repository branch
+     - Reconfigure token in admin panel
+     - Try publishing again
+   - **Prevention**: System automatically handles branch detection
+
+4. **Projects Not Loading**:
    - Check GitHub token configuration in admin panel
    - Verify repository name and owner
    - Ensure projects.json exists and is valid
    - Check browser console for error messages
 
-4. **Admin Login Issues**:
+5. **Admin Login Issues**:
    - Verify password configuration
    - Check browser console for errors
    - Clear localStorage and retry
 
-5. **Image Upload Problems**:
+6. **Image Upload Problems**:
    - Verify GitHub token has necessary permissions
    - Check file size and type restrictions
    - Ensure proper image format
    - Check admin panel token status
 
-6. **Token Configuration Issues**:
+7. **Token Configuration Issues**:
    - Ensure token has `repo` scope
    - Verify token hasn't expired
    - Check for typos in token entry
