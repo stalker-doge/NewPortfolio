@@ -276,15 +276,17 @@
       "technologies": [
         "real girlkissing"
       ],
-      "features": [],
+      "features": [
+        "kisses girls"
+      ],
       "links": {
         "demo": "",
         "github": "",
         "download": ""
       },
       "images": {
-        "hero": "",
-        "thumbnail": "",
+        "hero": "assets/projects/yuri/hero.jpg",
+        "thumbnail": "assets/projects/yuri/thumbnail.jpg",
         "gallery": []
       },
       "stats": {
@@ -299,8 +301,8 @@
         "keywords": []
       },
       "id": "yuri",
-      "lastModified": "2025-10-13T12:14:57.138Z"
+      "lastModified": "2025-10-13T12:17:41.577Z"
     }
   ],
-  "lastUpdated": "2025-10-13T12:14:57.138Z"
+  "lastUpdated": "2025-10-13T12:17:41.577Z"
 }
