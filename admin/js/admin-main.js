@@ -377,7 +377,7 @@ class AdminApp {
         
         try {
             // Upload any new images first
-            await this.uploadProjectImages(updatedData);
+            await this.uploadProjectImages(updatedData, projectId);
             
             // Delete any removed images
             await this.deleteProjectImages();
@@ -586,8 +586,10 @@ class AdminApp {
     }
 
     // Image Management
-    async uploadProjectImages(projectData) {
-        const projectId = projectData.id || this.githubAPI.generateId(projectData.title);
+    async uploadProjectImages(projectData, existingProjectId = null) {
+        // Use existing project ID if available, otherwise generate from title
+        const projectId = existingProjectId || projectData.id || 
+                          (projectData.title ? this.githubAPI.generateId(projectData.title) : 'temp-project');
         
         // Upload hero image
         const heroFile = document.getElementById('heroImage').files[0];
