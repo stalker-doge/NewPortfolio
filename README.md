@@ -181,6 +181,108 @@ To verify your repository's default branch:
 5. **Test publishing**: Try to publish a draft project
 6. **System will**: Auto-detect correct branch and use it
 
+### **🚨 CRITICAL: "Cannot read properties of undefined (reading 'toLowerCase')"**
+
+If you get this JavaScript error when trying to publish, the issue is with **project ID generation**:
+
+#### **Root Cause**
+- **When updating projects**: `projectData.id` might be undefined
+- **When generating ID**: `projectData.title` might be undefined or null
+- **Calling .toLowerCase()**: On undefined value causes error
+- **Image upload fails**: Prevents project publishing
+
+#### **Solution: Safe Project ID Generation**
+The system now includes safe ID generation with multiple fallbacks:
+
+```javascript
+// In js/github-api.js - FIXED: Safe project ID generation
+generateId(title) {
+    // FIXED: Add null/undefined check
+    if (!title || typeof title !== 'string') {
+        return 'project-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
+    }
+    
+    return title
+        .toLowerCase()
+        .replace(/[^a-z0-9\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-')
+        .trim();
+}
+```
+
+#### **How It Works**
+1. **Null checks**: Before calling any string methods
+2. **Safe defaults**: Fallback values for all cases
+3. **Multiple fallback strategy**: Works with any data combination
+4. **Conditional execution**: Only runs operations when data is available
+
+#### **Enhanced Image Upload**
+```javascript
+// In admin/js/admin-main.js - FIXED: Safe image upload
+async uploadProjectImages(projectData, existingProjectId = null) {
+    // Use existing project ID if available, otherwise generate from title
+    const projectId = existingProjectId || projectData.id || 
+                      (projectData.title ? this.githubAPI.generateId(projectData.title) : 'temp-project');
+    
+    // Rest of the method works safely with guaranteed projectId
+    // Upload hero image, thumbnail image, gallery images...
+}
+```
+
+#### **Fix Steps for JavaScript Errors**
+1. **Access admin panel**: `/admin/`
+2. **Login**: `portfolio2024`
+3. **Configure token**: Enter GitHub token in Settings
+4. **Save token**: Click "Save Token" button
+5. **Test publishing**: Try to publish a draft project
+6. **System will**: Use safe ID generation and publish successfully
+
+### **🚨 CRITICAL: 404 and 403 API Errors**
+
+If you get 404 "Not Found" or 403 "Resource not accessible" errors:
+
+#### **404 "Not Found" Errors**
+- **Cause**: Repository doesn't exist or file path is wrong
+- **Solution**: 
+  1. Verify repository exists at `https://github.com/stalker-doge/NewPortfolio`
+  2. Check repository name and username in `js/github-api.js`
+  3. Ensure repository is accessible with your token
+
+#### **403 "Resource not accessible" Errors**
+- **Cause**: Token lacks proper permissions or repository is private
+- **Solution**:
+  1. Ensure token has `repo` scope (not just `public_repo`)
+  2. Verify you have write access to the repository
+  3. Check if repository is private and token has access
+
+#### **Enhanced Error Handling**
+The system now includes better error handling:
+
+```javascript
+// In js/github-api.js - ENHANCED: Better error messages
+async apiRequest(endpoint, options = {}) {
+    try {
+        const response = await fetch(url, { ...options, headers });
+        
+        if (!response.ok) {
+            let errorData;
+            try {
+                errorData = await response.json();
+            } catch (e) {
+                errorData = { message: response.statusText };
+            }
+            throw new Error(`GitHub API Error: ${errorData.message || response.statusText}`);
+        }
+        
+        return await response.json();
+    } catch (error) {
+        console.error('GitHub API Request Failed:', error);
+        throw error;
+    }
+}
+```
+
 ## System Architecture
 
 ### 1. Data Structure (`data/projects.json`)
@@ -254,6 +356,7 @@ The system includes a comprehensive GitHub API wrapper that handles:
 - **Error Handling**: Robust error management and recovery
 - **Secure Token Management**: Environment variables and localStorage
 - **Automatic Branch Detection**: Detects and uses correct repository branch
+- **Safe ID Generation**: Prevents JavaScript errors with fallbacks
 
 ### 3. Admin Interface (`admin/`)
 
@@ -466,24 +569,40 @@ The main portfolio (`index.html`, `js/script.js`) dynamically:
      - Try publishing again
    - **Prevention**: System automatically handles branch detection
 
-4. **Projects Not Loading**:
+4. **Cannot read properties of undefined (reading 'toLowerCase')**:
+   - **Cause**: Project ID generation fails when title is undefined
+   - **Solution**: 
+     - System now uses safe ID generation with fallbacks
+     - Enhanced error handling prevents JavaScript errors
+     - Multiple fallback strategy ensures compatibility
+   - **Prevention**: System automatically handles undefined values
+
+5. **404/403 API Errors**:
+   - **Cause**: Repository doesn't exist or token lacks permissions
+   - **Solution**:
+     - Verify repository exists and is accessible
+     - Ensure token has `repo` scope (not just `public_repo`)
+     - Check repository name and username configuration
+   - **Prevention**: Enhanced error handling provides clear guidance
+
+6. **Projects Not Loading**:
    - Check GitHub token configuration in admin panel
    - Verify repository name and owner
    - Ensure projects.json exists and is valid
    - Check browser console for error messages
 
-5. **Admin Login Issues**:
+7. **Admin Login Issues**:
    - Verify password configuration
    - Check browser console for errors
    - Clear localStorage and retry
 
-6. **Image Upload Problems**:
+8. **Image Upload Problems**:
    - Verify GitHub token has necessary permissions
    - Check file size and type restrictions
    - Ensure proper image format
    - Check admin panel token status
 
-7. **Token Configuration Issues**:
+9. **Token Configuration Issues**:
    - Ensure token has `repo` scope
    - Verify token hasn't expired
    - Check for typos in token entry

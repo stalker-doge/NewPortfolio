@@ -60,7 +60,12 @@ class GitHubAPI {
             const response = await fetch(url, { ...options, headers });
             
             if (!response.ok) {
-                const errorData = await response.json();
+                let errorData;
+                try {
+                    errorData = await response.json();
+                } catch (e) {
+                    errorData = { message: response.statusText };
+                }
                 throw new Error(`GitHub API Error: ${errorData.message || response.statusText}`);
             }
 
@@ -371,6 +376,11 @@ class GitHubAPI {
 
     // Generate URL-friendly ID from title
     generateId(title) {
+        // FIXED: Add null/undefined check
+        if (!title || typeof title !== 'string') {
+            return 'project-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
+        }
+        
         return title
             .toLowerCase()
             .replace(/[^a-z0-9\s-]/g, '')
