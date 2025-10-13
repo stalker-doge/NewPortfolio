@@ -389,6 +389,21 @@ class GitHubAPI {
             throw error;
         }
     }
+
+    // Test repository access
+    async testRepositoryAccess() {
+        try {
+            await this.getRepositoryInfo();
+            return { success: true, message: 'Repository access successful' };
+        } catch (error) {
+            console.error('Repository access test failed:', error);
+            return { 
+                success: false, 
+                message: `Repository access failed: ${error.message}`,
+                error: error.message 
+            };
+        }
+    }
 }
 
 // Create global instance

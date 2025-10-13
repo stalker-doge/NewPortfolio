@@ -203,7 +203,17 @@ class AdminApp {
             console.error('Token validation failed:', error);
             localStorage.removeItem('github_token');
             this.updateTokenStatus();
-            ToastManager.error('Invalid GitHub token. Please check and try again.');
+            
+            // Provide specific error message based on the error
+            if (error.message.includes('404') || error.message.includes('Not Found')) {
+                ToastManager.error('Repository not found. Check username/repository name in API configuration.');
+            } else if (error.message.includes('401') || error.message.includes('Bad credentials')) {
+                ToastManager.error('Invalid GitHub token. Please check and try again.');
+            } else if (error.message.includes('403') || error.message.includes('Forbidden')) {
+                ToastManager.error('Token lacks necessary permissions. Ensure token has "repo" scope.');
+            } else {
+                ToastManager.error(`GitHub token error: ${error.message}`);
+            }
         }
     }
 

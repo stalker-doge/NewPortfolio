@@ -15,8 +15,8 @@ The system has been updated to use secure token management instead of hardcoded 
 1. **Create GitHub Personal Access Token**:
    - Go to GitHub → Settings → Developer Settings → Personal Access Tokens
    - Click "Generate new token" (classic)
-   - Set expiration and description
-   - Select scopes: `repo` (full repository access)
+   - Set expiration and description (e.g., "Portfolio Admin")
+   - **CRITICAL**: Select scopes: `repo` (full repository access)
    - Generate and copy the token immediately
 
 2. **Configure Token in Admin Panel**:
@@ -30,6 +30,111 @@ The system has been updated to use secure token management instead of hardcoded 
    - Token is stored in `localStorage` (browser storage)
    - Never committed to version control
    - Automatically loaded on admin access
+
+## 🔧 **Troubleshooting GitHub Token Issues**
+
+### **Error: "Resource not accessible by personal access token"**
+
+This error occurs when your GitHub token doesn't have the correct permissions or repository configuration. Here's how to fix it:
+
+#### **Step 1: Verify Token Scopes**
+Your GitHub token **MUST** have the `repo` scope selected:
+
+```
+✅ repo (Full control of private repositories)
+❌ public_repo (Only access to public repositories)
+❌ repo:status (Access commit status)
+❌ repo:invite (Access repository invitations)
+```
+
+**To fix:**
+1. Go to GitHub → Settings → Developer Settings → Personal Access Tokens
+2. Find your token or create a new one
+3. **Ensure `repo` is checked** (this is required!)
+4. Save the token and reconfigure in admin panel
+
+#### **Step 2: Verify Repository Access**
+Ensure your token has access to the target repository:
+
+```
+Repository: stalker-doge/NewPortfolio
+Username: stalker-doge
+```
+
+**To fix:**
+1. Verify you have access to the repository
+2. If repository is private, ensure token has `repo` scope
+3. If repository is public, `public_repo` scope might work, but `repo` is recommended
+
+#### **Step 3: Check Repository Name**
+Verify the repository name in the GitHub API configuration:
+
+```javascript
+// In js/github-api.js
+this.username = 'stalker-doge';    // Your GitHub username
+this.repo = 'NewPortfolio';         // Your repository name
+```
+
+**To fix:**
+1. Verify these match your actual GitHub repository
+2. Update if necessary and save the file
+3. Reconfigure token in admin panel
+
+#### **Step 4: Test Token Configuration**
+Use the admin panel to test your token:
+
+1. Access admin panel at `/admin/`
+2. Go to Settings tab
+3. Enter your GitHub token
+4. Click "Save Token"
+5. Check for success message: "GitHub token saved successfully!"
+
+#### **Step 5: Verify Repository Information**
+After saving token, check the system information:
+
+1. In Settings tab, look at "System Information"
+2. Repository should show: `stalker-doge/NewPortfolio`
+3. API Status should show: "Online"
+
+### **Common Solutions**
+
+| Issue | Solution |
+|--------|----------|
+| Token not working | Create new token with `repo` scope |
+| Repository not found | Verify username and repository name |
+| Access denied | Ensure token has correct repository access |
+| Still not working | Try creating a fresh token |
+
+### **🚨 CRITICAL: If Token Has Full repo Permissions**
+
+If your token already has full `repo` permissions and you still get "Resource not accessible by personal access token", the issue is likely with the repository configuration:
+
+#### **Check Repository Existence**
+1. **Verify the repository exists**: Go to `https://github.com/stalker-doge/NewPortfolio`
+2. **If repository doesn't exist**: Create it first
+3. **If repository exists**: Check that you have access to it
+
+#### **Update Repository Configuration**
+If the repository name is different, update it in `js/github-api.js`:
+
+```javascript
+// Update these values to match your actual repository
+this.username = 'your-actual-username';    // Your GitHub username
+this.repo = 'your-actual-repo-name';      // Your repository name
+```
+
+#### **Common Repository Issues**
+- **Repository name is case-sensitive**: `NewPortfolio` ≠ `newportfolio`
+- **Username must be exact**: `stalker-doge` ≠ `Stalker-Doge`
+- **Repository must be accessible**: You must have write permissions
+- **Repository must exist**: Create it if it doesn't exist
+
+#### **Repository Setup Steps**
+1. **Create repository** at GitHub if it doesn't exist
+2. **Clone repository locally** if working locally
+3. **Update API configuration** in `js/github-api.js`
+4. **Reconfigure token** in admin panel
+5. **Test connection** by saving token
 
 ## System Architecture
 
@@ -299,24 +404,32 @@ The main portfolio (`index.html`, `js/script.js`) dynamically:
    - **Solution**: Use admin panel to configure token
    - **Prevention**: Never commit tokens to version control
 
-2. **Projects Not Loading**:
+2. **Resource Not Accessible by Token**:
+   - **Cause**: Token lacks `repo` scope or incorrect repository configuration
+   - **Solution**: 
+     - Create token with `repo` scope
+     - Verify repository exists and you have access
+     - Check username/repository name in API configuration
+   - **Prevention**: Always verify token scopes and repository access
+
+3. **Projects Not Loading**:
    - Check GitHub token configuration in admin panel
    - Verify repository name and owner
    - Ensure projects.json exists and is valid
    - Check browser console for error messages
 
-3. **Admin Login Issues**:
+4. **Admin Login Issues**:
    - Verify password configuration
    - Check browser console for errors
    - Clear localStorage and retry
 
-4. **Image Upload Problems**:
+5. **Image Upload Problems**:
    - Verify GitHub token has necessary permissions
    - Check file size and type restrictions
    - Ensure proper image format
    - Check admin panel token status
 
-5. **Token Configuration Issues**:
+6. **Token Configuration Issues**:
    - Ensure token has `repo` scope
    - Verify token hasn't expired
    - Check for typos in token entry
@@ -429,6 +542,6 @@ This project is licensed under the MIT License. See the LICENSE file for details
 
 ---
 
-**🔐 Security Reminder**: Never commit GitHub tokens or sensitive credentials to version control. Always use the admin panel for secure token management.
+**🔐 Security Reminder**: Never commit GitHub tokens or sensitive credentials to version control. Always use admin panel for secure token management.
 
 **📝 Note**: This is a comprehensive CMS system built with modern web technologies and security best practices. Regular updates and maintenance are recommended to ensure security and performance.
