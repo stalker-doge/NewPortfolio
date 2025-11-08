@@ -108,7 +108,6 @@
   "env": {
     "NODE_ENV": "production"
   },
-  "functions": {},
   "rewrites": [],
   "redirects": [],
   "installCommand": "npm install",
