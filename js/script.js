@@ -1,6 +1,39 @@
 // JavaScript for Professional Portfolio Website
 
+// Service Worker Registration
+function registerServiceWorker() {
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/sw.js')
+                .then((registration) => {
+                    console.log('Service Worker registered successfully:', registration.scope);
+                    
+                    // Check for updates
+                    registration.addEventListener('updatefound', () => {
+                        const newWorker = registration.installing;
+                        newWorker.addEventListener('statechange', () => {
+                            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                // New content is available
+                                if (confirm('New content is available. Would you like to refresh the page?')) {
+                                    window.location.reload();
+                                }
+                            }
+                        });
+                    });
+                })
+                .catch((error) => {
+                    console.log('Service Worker registration failed:', error);
+                });
+        });
+    } else {
+        console.log('Service Workers are not supported in this browser');
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
+    // Register service worker
+    registerServiceWorker();
+    
     // Initialize all functionality
     initNavigation();
     initScrollEffects();
@@ -8,6 +41,19 @@ document.addEventListener('DOMContentLoaded', function() {
     initAnimations();
     initInteractiveElements();
     initPerformanceOptimizations();
+    
+    // Add loading complete class
+    setTimeout(() => {
+        document.body.classList.add('loaded');
+        // Announce to screen readers that page is loaded
+        const announcement = document.createElement('div');
+        announcement.setAttribute('role', 'status');
+        announcement.setAttribute('aria-live', 'polite');
+        announcement.className = 'sr-only';
+        announcement.textContent = 'Portfolio page fully loaded';
+        document.body.appendChild(announcement);
+        setTimeout(() => announcement.remove(), 1000);
+    }, 100);
 });
 
 // Navigation Functionality

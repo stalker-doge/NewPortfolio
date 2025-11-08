@@ -1,0 +1,37 @@
+{
+  "name": "lucian-matan-portfolio",
+  "version": "1.0.0",
+  "description": "Professional games programming portfolio website",
+  "main": "index.html",
+  "scripts": {
+    "build": "npm run minify-css && npm run minify-js",
+    "minify-css": "cleancss -o dist/css/style.min.css css/style.css && cleancss -o dist/admin/css/admin.min.css admin/css/admin.css",
+    "minify-js": "terser js/script.js -o dist/js/script.min.js --compress --mangle && terser js/github-api.js -o dist/js/github-api.min.js --compress --mangle && terser admin/js/admin-main.js -o dist/admin/js/admin-main.min.js --compress --mangle",
+    "dev": "serve . -p 3000",
+    "optimize-images": "imagemin assets/projects/* --out-dir=dist/assets/projects --plugin=mozjpeg --plugin=pngquant --plugin=webp",
+    "prepare-deploy": "npm run build && npm run optimize-images && cp -r data dist/ && cp index.html dist/ && cp -r admin dist/ && cp -r assets dist/",
+    "start": "serve . -p 3000"
+  },
+  "keywords": [
+    "portfolio",
+    "games-programming",
+    "web-development",
+    "javascript",
+    "css",
+    "html"
+  ],
+  "author": "Lucian Matan",
+  "license": "MIT",
+  "devDependencies": {
+    "clean-css-cli": "^5.3.2",
+    "imagemin": "^8.0.1",
+    "imagemin-mozjpeg": "^10.0.0",
+    "imagemin-pngquant": "^9.0.2",
+    "imagemin-webp": "^7.0.0",
+    "serve": "^14.2.1",
+    "terser": "^5.19.2"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

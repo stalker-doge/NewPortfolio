@@ -1,0 +1,17 @@
+User-agent: *
+Allow: /
+
+# Prioritize important pages
+Crawl-delay: 1
+
+# Disallow admin section from search engines
+Disallow: /admin/
+
+# Allow important assets
+Allow: /css/
+Allow: /js/
+Allow: /assets/
+Allow: /data/
+
+# Sitemap location
+Sitemap: https://your-domain.com/sitemap.xml
