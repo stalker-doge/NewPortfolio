@@ -66,7 +66,7 @@
       ]
     },
     {
-      "source": "/(.*\\.(js|css))",
+      "source": "/(.*\.(js|css))",
       "headers": [
         {
           "key": "Content-Security-Policy",
@@ -102,7 +102,7 @@
       ]
     },
     {
-      "source": "/(.*\\.(png|jpg|jpeg|gif|svg|ico|webp))",
+      "source": "/(.*\.(png|jpg|jpeg|gif|svg|ico|webp))",
       "headers": [
         {
           "key": "Cache-Control",
@@ -111,7 +111,7 @@
       ]
     },
     {
-      "source": "/(.*\\.(woff|woff2|ttf|eot))",
+      "source": "/(.*\.(woff|woff2|ttf|eot))",
       "headers": [
         {
           "key": "Cache-Control",
