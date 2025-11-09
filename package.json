@@ -9,7 +9,7 @@
     "minify-js": "terser js/script.js -o dist/js/script.min.js --compress --mangle && terser js/github-api.js -o dist/js/github-api.min.js --compress --mangle && terser admin/js/admin-main.js -o dist/admin/js/admin-main.min.js --compress --mangle",
     "dev": "serve . -p 3000",
     "optimize-images": "imagemin assets/projects/* --out-dir=dist/assets/projects --plugin=mozjpeg --plugin=pngquant --plugin=webp",
-    "prepare-deploy": "npm run build && npm run optimize-images && cp -r data dist/ && cp index.html dist/ && cp -r admin dist/ && cp -r assets dist/",
+    "prepare-deploy": "npm run build && ncp index.html dist/ && ncp data dist/ && ncp admin dist/ && ncp assets dist/",
     "start": "serve . -p 3000"
   },
   "keywords": [
@@ -28,6 +28,7 @@
     "imagemin-mozjpeg": "^10.0.0",
     "imagemin-pngquant": "^9.0.2",
     "imagemin-webp": "^7.0.0",
+    "ncp": "^2.0.0",
     "serve": "^14.2.1",
     "terser": "^5.19.2"
   },
