@@ -369,17 +369,13 @@ function initProjectModal() {
         }
     });
 
-    // Navigate between projects
-    window.navigateProject = function(direction) {
-        currentProjectIndex += direction;
-        
-        if (currentProjectIndex < 0) {
-            currentProjectIndex = projects.length - 1;
-        } else if (currentProjectIndex >= projects.length) {
-            currentProjectIndex = 0;
+    // Navigate between projects - simplified to avoid conflicts with Vercel routing
+    // This function now just opens modal but doesn't interfere with server-side routing
+    window.showProjectModal = function(projectId) {
+        const project = projects.find(p => p.id === projectId);
+        if (project) {
+            openProjectModal(projects.indexOf(project));
         }
-        
-        openProjectModal(projects[currentProjectIndex]);
     };
 
     function openProjectModal(project) {
