@@ -23,8 +23,8 @@
         ]
       },
       "links": {
-        "demo": "#",
-        "github": "#",
+        "demo": "https://portfolio-smoky-theta-84.vercel.app",
+        "github": "https://github.com/stalker-doge/NewPortfolio",
         "download": "#"
       },
       "technologies": [
@@ -285,7 +285,7 @@
         "download": ""
       },
       "images": {
-        "hero": "assets/projects/yuri/hero.jpg",
+      "hero": "assets/projects/yuri/hero.jpg",
         "thumbnail": "assets/projects/yuri/thumbnail.jpg",
         "gallery": []
       },
